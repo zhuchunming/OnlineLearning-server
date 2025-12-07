@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.FavoritesMapper">
+	<select id="findFavoritesList" resultType="Favorites">
+		select * from favorites 
+	</select>
+
+	<select id="query" parameterType="java.util.Map" resultType="Favorites">
+	    select  a.*,b.cname as by1,b.cimage  as by2
+        from favorites a left join course b on a.cid = b.cid 	
+		<where>
+			<if test="id != null and id !=0 ">
+		    and a.id = #{id}
+			</if>
+			<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+			</if>
+			<if test="sno != null and sno != ''">
+		    and a.sno = #{sno}
+			</if>
+			<if test="ctime != null and ctime != ''">
+		    and a.ctime = #{ctime}
+			</if>
+			<if test="condition != null and condition != ''">
+		    ${condition} 
+			</if>
+
+		</where>
+
+    order by ${sort} id desc
+
+		<if test="page">
+			limit #{offset} ,#{pageSize}
+		</if>
+	</select>
+
+	<select id="getCount" parameterType="java.util.Map" resultType="Int">
+		select count(0) from favorites a  
+		<where>
+			<if test="id != null and id !=0 ">
+		    and a.id = #{id}
+			</if>
+			<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+			</if>
+			<if test="sno != null and sno != ''">
+		    and a.sno = #{sno}
+			</if>
+			<if test="ctime != null and ctime != ''">
+		    and a.ctime = #{ctime}
+			</if>
+			<if test="condition != null and condition != ''">
+		    ${condition} 
+			</if>
+
+		</where>
+	</select>
+
+	<select id="queryFavoritesById" parameterType="int" resultType="Favorites">
+    select  *  
+     from favorites a  	 where a.id=#{value}
+	</select>
+
+	<insert id="insertFavorites" useGeneratedKeys="true" keyProperty="id" parameterType="Favorites">
+    insert into favorites
+    (cid,sno,ctime)
+    values
+    (#{cid},#{sno},now());
+	</insert>
+
+	<update id="updateFavorites" parameterType="Favorites">
+    update favorites 
+		<set>
+			<if test="cid != null ">
+		    cid = #{cid},
+			</if>
+			<if test="sno != null and sno != ''">
+		    sno = #{sno},
+			</if>
+			<if test="ctime != null and ctime != ''">
+		    ctime = #{ctime},
+			</if>
+
+		</set>
+		<where>
+			<if test="condition != null and condition != ''">
+      ${condition}
+			</if>
+			<if test="id != null or id != ''"> id=#{id}
+			</if>
+		</where>
+	</update>
+
+
+	<delete id="deleteFavorites" parameterType="int">
+    delete from  favorites where id=#{value}
+	</delete>
+
+
+
+</mapper>
+
+ 

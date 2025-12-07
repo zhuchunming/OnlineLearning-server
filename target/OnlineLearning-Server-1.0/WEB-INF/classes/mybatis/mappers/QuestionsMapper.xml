@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.QuestionsMapper">
+	<select id="findQuestionsList"  resultType="Questions">
+		select * from questions 
+	</select>
+	
+	<select id="query" parameterType="java.util.Map" resultType="Questions">
+	    select  *  
+        from questions a  left join course b on a.cid=b.cid  	
+		<where>
+      		<if test="qid != null and qid !=0 ">
+		    and a.qid = #{qid}
+		</if>
+		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="answer != null and answer != ''">
+		    and a.answer = #{answer}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+
+    order by ${sort} qid desc
+
+    <if test="page">
+			limit #{offset} ,#{pageSize}
+		</if>
+	</select>	
+	
+	<select id="getCount" parameterType="java.util.Map" resultType="Int">
+		select count(0) from questions a  left join course b on a.cid=b.cid  
+		<where>
+      		<if test="qid != null and qid !=0 ">
+		    and a.qid = #{qid}
+		</if>
+		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="answer != null and answer != ''">
+		    and a.answer = #{answer}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+	</select>	
+	
+	<select id="queryQuestionsById" parameterType="int" resultType="Questions">
+    select  *  
+     from questions a  left join course b on a.cid=b.cid  	 where a.qid=#{value}
+  </select>
+ 
+	<insert id="insertQuestions" useGeneratedKeys="true" keyProperty="qid" parameterType="Questions">
+    insert into questions
+    (cid,content,answer,analysis)
+    values
+    (#{cid},#{content},#{answer},#{analysis});
+  </insert>
+	
+	<update id="updateQuestions" parameterType="Questions" >
+    update questions 
+    <set>
+		<if test="cid != null ">
+		    cid = #{cid},
+		</if>
+		<if test="content != null and content != ''">
+		    content = #{content},
+		</if>
+		<if test="answer != null and answer != ''">
+		    answer = #{answer},
+		</if>
+		<if test="analysis != null and analysis != ''">
+		    analysis = #{analysis},
+		</if>
+
+    </set>
+   <where> 
+    <if test="condition != null and condition != ''">
+      ${condition}
+    </if>
+    <if test="qid != null or qid != ''">
+      qid=#{qid}
+    </if>
+   </where>     
+  </update>	
+ 
+	
+	<delete id="deleteQuestions" parameterType="int">
+    delete from  questions where qid=#{value}
+  </delete>
+
+	
+	
+</mapper>
+
+ 

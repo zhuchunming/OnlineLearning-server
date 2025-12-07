@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CourseMapper">
+	<select id="findCourseList"  resultType="Course">
+		select * from course 
+	</select>
+	
+	<select id="query" parameterType="java.util.Map" resultType="Course">
+	    select  *  
+        from course a  left join coursecategories b on a.catid=b.catid  left join teachers c on a.tno=c.tno  	
+		<where>
+      		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="cname != null and cname != ''">
+		    and a.cname = #{cname}
+		</if>
+		<if test="catid != null and catid !=0 ">
+		    and a.catid = #{catid}
+		</if>
+		<if test="cimage != null and cimage != ''">
+		    and a.cimage = #{cimage}
+		</if>
+		<if test="thours != null and thours !=0 ">
+		    and a.thours = #{thours}
+		</if>
+		<if test="tno != null and tno != ''">
+		    and a.tno = #{tno}
+		</if>
+		<if test="ctotal != null and ctotal !=0 ">
+		    and a.ctotal = #{ctotal}
+		</if>
+		<if test="addtime != null and addtime != ''">
+		    and a.addtime = #{addtime}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+
+    order by ${sort} cid desc
+
+    <if test="page">
+			limit #{offset} ,#{pageSize}
+		</if>
+	</select>	
+	
+	<select id="getCount" parameterType="java.util.Map" resultType="Int">
+		select count(0) from course a  left join coursecategories b on a.catid=b.catid  left join teachers c on a.tno=c.tno  
+		<where>
+      		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="cname != null and cname != ''">
+		    and a.cname = #{cname}
+		</if>
+		<if test="catid != null and catid !=0 ">
+		    and a.catid = #{catid}
+		</if>
+		<if test="cimage != null and cimage != ''">
+		    and a.cimage = #{cimage}
+		</if>
+		<if test="thours != null and thours !=0 ">
+		    and a.thours = #{thours}
+		</if>
+		<if test="tno != null and tno != ''">
+		    and a.tno = #{tno}
+		</if>
+		<if test="ctotal != null and ctotal !=0 ">
+		    and a.ctotal = #{ctotal}
+		</if>
+		<if test="addtime != null and addtime != ''">
+		    and a.addtime = #{addtime}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+	</select>	
+	
+	<select id="queryCourseById" parameterType="int" resultType="Course">
+    select  *  
+     from course a  left join coursecategories b on a.catid=b.catid  left join teachers c on a.tno=c.tno  	 where a.cid=#{value}
+  </select>
+ 
+	<insert id="insertCourse" useGeneratedKeys="true" keyProperty="cid" parameterType="Course">
+    insert into course
+    (cname,catid,cimage,thours,cdesc,tno,ctotal,addtime)
+    values
+    (#{cname},#{catid},#{cimage},#{thours},#{cdesc},#{tno},#{ctotal},now());
+  </insert>
+	
+	<update id="updateCourse" parameterType="Course" >
+    update course 
+    <set>
+		<if test="cname != null and cname != ''">
+		    cname = #{cname},
+		</if>
+		<if test="catid != null ">
+		    catid = #{catid},
+		</if>
+		<if test="cimage != null and cimage != ''">
+		    cimage = #{cimage},
+		</if>
+		<if test="thours != null ">
+		    thours = #{thours},
+		</if>
+		<if test="cdesc != null and cdesc != ''">
+		    cdesc = #{cdesc},
+		</if>
+		<if test="tno != null and tno != ''">
+		    tno = #{tno},
+		</if>
+		<if test="ctotal != null ">
+		    ctotal = #{ctotal},
+		</if>
+		<if test="addtime != null and addtime != ''">
+		    addtime = #{addtime},
+		</if>
+
+    </set>
+   <where> 
+    <if test="condition != null and condition != ''">
+      ${condition}
+    </if>
+    <if test="cid != null or cid != ''">
+      cid=#{cid}
+    </if>
+   </where>     
+  </update>	
+ 
+	
+	<delete id="deleteCourse" parameterType="int">
+    delete from  course where cid=#{value}
+  </delete>
+
+	
+	
+</mapper>
+
+ 

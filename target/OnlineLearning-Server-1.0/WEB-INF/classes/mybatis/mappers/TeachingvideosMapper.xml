@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.TeachingvideosMapper">
+	<select id="findTeachingvideosList"  resultType="Teachingvideos">
+		select * from teachingvideos 
+	</select>
+	
+	<select id="query" parameterType="java.util.Map" resultType="Teachingvideos">
+	    select  *  
+        from teachingvideos a  left join course b on a.cid=b.cid  	
+		<where>
+      		<if test="vid != null and vid !=0 ">
+		    and a.vid = #{vid}
+		</if>
+		<if test="vname != null and vname != ''">
+		    and a.vname = #{vname}
+		</if>
+		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="vfile != null and vfile != ''">
+		    and a.vfile = #{vfile}
+		</if>
+		<if test="uploadtime != null and uploadtime != ''">
+		    and a.uploadtime = #{uploadtime}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+
+    order by ${sort} vid desc
+
+    <if test="page">
+			limit #{offset} ,#{pageSize}
+		</if>
+	</select>	
+	
+	<select id="getCount" parameterType="java.util.Map" resultType="Int">
+		select count(0) from teachingvideos a  left join course b on a.cid=b.cid  
+		<where>
+      		<if test="vid != null and vid !=0 ">
+		    and a.vid = #{vid}
+		</if>
+		<if test="vname != null and vname != ''">
+		    and a.vname = #{vname}
+		</if>
+		<if test="cid != null and cid !=0 ">
+		    and a.cid = #{cid}
+		</if>
+		<if test="vfile != null and vfile != ''">
+		    and a.vfile = #{vfile}
+		</if>
+		<if test="uploadtime != null and uploadtime != ''">
+		    and a.uploadtime = #{uploadtime}
+		</if>
+		<if test="condition != null and condition != ''">
+		    ${condition} 
+		</if>
+
+    </where>
+	</select>	
+	
+	<select id="queryTeachingvideosById" parameterType="int" resultType="Teachingvideos">
+    select  *  
+     from teachingvideos a  left join course b on a.cid=b.cid  	 where a.vid=#{value}
+  </select>
+ 
+	<insert id="insertTeachingvideos" useGeneratedKeys="true" keyProperty="vid" parameterType="Teachingvideos">
+    insert into teachingvideos
+    (vname,cid,vfile,vdescription,uploadtime)
+    values
+    (#{vname},#{cid},#{vfile},#{vdescription},now());
+  </insert>
+	
+	<update id="updateTeachingvideos" parameterType="Teachingvideos" >
+    update teachingvideos 
+    <set>
+		<if test="vname != null and vname != ''">
+		    vname = #{vname},
+		</if>
+		<if test="cid != null ">
+		    cid = #{cid},
+		</if>
+		<if test="vfile != null and vfile != ''">
+		    vfile = #{vfile},
+		</if>
+		<if test="vdescription != null and vdescription != ''">
+		    vdescription = #{vdescription},
+		</if>
+		<if test="uploadtime != null and uploadtime != ''">
+		    uploadtime = #{uploadtime},
+		</if>
+
+    </set>
+   <where> 
+    <if test="condition != null and condition != ''">
+      ${condition}
+    </if>
+    <if test="vid != null or vid != ''">
+      vid=#{vid}
+    </if>
+   </where>     
+  </update>	
+ 
+	
+	<delete id="deleteTeachingvideos" parameterType="int">
+    delete from  teachingvideos where vid=#{value}
+  </delete>
+
+	
+	
+</mapper>
+
+ 
