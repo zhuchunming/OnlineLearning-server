@@ -8,7 +8,6 @@ import com.model.Teachingvideos;
 import com.service.CommonAuditService;
 import com.util.BusinessException;
 import com.util.PageBean;
-import org.apache.ibatis.builder.BuilderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -92,6 +91,14 @@ public class CommonAuditServiceImpl implements CommonAuditService {
 
 	@Override
 	public void audit(CommonAudit audit) {
+		CommonAudit au = auditMapper.queryById(audit.getId());
+		if(ObjectUtils.isEmpty(au)){
+			throw new BusinessException("审核数据不存在id：" + audit.getId());
+		}else{
+			if(!AuditStatus.AWAIT.getCode().equals(au.getOpstatus())){
+				throw new BusinessException("只有待审核的数据才允许操作");
+			}
+		}
 		if(AuditStatus.PASS.getCode().equals(audit.getOpstatus()) ||
 				AuditStatus.REJECT.getCode().equals(audit.getOpstatus())){
 			//更新审核表
@@ -102,7 +109,7 @@ public class CommonAuditServiceImpl implements CommonAuditService {
 			video.setOpstatus(audit.getOpstatus());
 			teachingvideosMapper.updateTeachingvideos(video);
 		}else{
-			throw new BuilderException("审核状态异常：" + audit.getOpstatus());
+			throw new BusinessException("审核状态异常：" + audit.getOpstatus());
 		}
 	}
 

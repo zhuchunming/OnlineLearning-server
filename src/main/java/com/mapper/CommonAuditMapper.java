@@ -16,6 +16,8 @@ public interface CommonAuditMapper {
 	//分页总条数查询
 	public int getCount(Map<String, Object> map);
 
+	public CommonAudit queryById(int id);
+
 	//更新
 	public void updateAudit(CommonAudit audit);
 }

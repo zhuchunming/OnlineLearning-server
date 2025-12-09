@@ -23,6 +23,9 @@
 		<if test="vname != null and vname != ''">
 		    and a.vname = #{vname}
 		</if>
+		<if test="opstatus != null and opstatus != ''">
+			and a.opstatus = #{opstatus}
+		</if>
 		<if test="cid != null and cid !=0 ">
 		    and a.cid = #{cid}
 		</if>

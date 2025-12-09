@@ -113,15 +113,17 @@ public class TestrecordsServiceImpl implements TestrecordsService {
 					resultqidList.addAll(qidList);
 				}
 				//新增错题集
-				List<Testerrorset> errorsets = new ArrayList<>();
-				for(Integer id : resultqidList){
-					Testerrorset errorset = new Testerrorset();
-					errorset.setQid(id);
-					errorset.setNum(1);
-					errorset.setSno(testrecords.getSno());
-					errorsets.add(errorset);
+				if(!CollectionUtils.isEmpty(resultqidList)){
+					List<Testerrorset> errorsets = new ArrayList<>();
+					for(Integer id : resultqidList){
+						Testerrorset errorset = new Testerrorset();
+						errorset.setQid(id);
+						errorset.setNum(1);
+						errorset.setSno(testrecords.getSno());
+						errorsets.add(errorset);
+					}
+					errorsetMapper.insertTesterrorset(errorsets);
 				}
-				errorsetMapper.insertTesterrorset(errorsets);
 			}
 		}catch (Exception e) {
 			// 记录错误日志

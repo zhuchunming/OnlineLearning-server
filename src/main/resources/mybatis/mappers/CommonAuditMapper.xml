@@ -3,8 +3,12 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.CommonAuditMapper">
 
+	<select id="queryById" parameterType="int" resultType="CommonAudit">
+		select * from commonaudit where id = #{value}
+	</select>
+
 	<select id="query" parameterType="java.util.Map" resultType="CommonAudit">
-		select id,a.applyno,a.applytype,a.applyname,a.opcode,a.createtime,
+		select a.id,a.applydataid,a.applyno,a.applytype,a.applyname,a.opcode,a.createtime,
 		(case when a.opstatus = '0' then
 		'待审核'
 		when a.opstatus = '1' then
@@ -22,8 +26,8 @@
 			<if test="applytype != null and applytype != ''">
 				and a.applytype = #{applytype}
 			</if>
-			<if test="applyuser != null and applyuser != ''">
-				and a.applyuser = #{applyuser}
+			<if test="opcode != null and opcode != ''">
+				and a.opcode = #{opcode}
 			</if>
 			<if test="opstatus != null and opstatus != ''">
 				and a.opstatus = #{opstatus}

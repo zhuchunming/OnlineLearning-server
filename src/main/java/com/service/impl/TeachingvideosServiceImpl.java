@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.enums.AuditStatus;
 import com.enums.AuditType;
 import com.mapper.TeachingvideosMapper;
 import com.model.Teachingvideos;
@@ -8,6 +9,7 @@ import com.service.TeachingvideosService;
 import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,10 @@ public class TeachingvideosServiceImpl implements TeachingvideosService {
 			map.put("uploadtime", teachingvideos.getUploadtime());
 			map.put("sort", teachingvideos.getSort());
 			map.put("condition", teachingvideos.getCondition());
+			//学生端
+			if(!StringUtils.hasText(teachingvideos.getCondition())){
+				map.put("opstatus", AuditStatus.PASS.getCode());
+			}
 
 		}
 		PageBean.setPageMap(map, page);
