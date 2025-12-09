@@ -1,8 +1,8 @@
 package com.service;
-import java.util.List;
-
 import com.model.Teachingvideos;
 import com.util.PageBean;
+
+import java.util.List;
 
 public interface TeachingvideosService{
 	
@@ -10,7 +10,7 @@ public interface TeachingvideosService{
 	public List<Teachingvideos> queryTeachingvideosList(Teachingvideos teachingvideos,PageBean page) throws Exception;
  
 	//添加
-	public int insertTeachingvideos(Teachingvideos teachingvideos) throws Exception ;
+	public String insertTeachingvideos(Teachingvideos teachingvideos) throws Exception ;
 	
 	//根据ID删除
 	public int deleteTeachingvideos(int id) throws Exception ;

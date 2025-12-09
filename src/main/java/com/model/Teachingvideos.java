@@ -1,6 +1,4 @@
 package com.model;
-import java.util.List;
-
 /**
 * (teachingvideos)教学视频实体类
 */
@@ -14,6 +12,9 @@ public class Teachingvideos extends ComData{
 	private String vfile;    //视频文件
 	private String vdescription;    //视频介绍
 	private String uploadtime;    //上传时间
+	private String opstatus;	//审核状态 0审核中 1审核驳回 2审核通过
+	private String opcode;	//申请用户
+
 
 	public Integer getVid() {
 		return vid;
@@ -71,5 +72,20 @@ public class Teachingvideos extends ComData{
 		this.uploadtime = uploadtime;
 	}
 
+	public String getOpstatus() {
+		return opstatus;
+	}
+
+	public void setOpstatus(String opstatus) {
+		this.opstatus = opstatus;
+	}
+
+	public String getOpcode() {
+		return opcode;
+	}
+
+	public void setOpcode(String opcode) {
+		this.opcode = opcode;
+	}
 }
 

@@ -7,8 +7,15 @@
 	</select>
 	
 	<select id="query" parameterType="java.util.Map" resultType="Teachingvideos">
-	    select  *  
-        from teachingvideos a  left join course b on a.cid=b.cid  	
+	    select  a.vid,a.vname,a.cid,a.vfile,a.vdescription,a.uploadtime,
+		( case when a.opstatus = '0' then
+		'待审核'
+		when a.opstatus = '1' then
+		'审核驳回'
+		when a.opstatus = '2' then
+		'审核通过' else ''
+		end
+		) opstatus,b.cname from teachingvideos a  left join course b on a.cid=b.cid
 		<where>
       		<if test="vid != null and vid !=0 ">
 		    and a.vid = #{vid}
@@ -70,9 +77,9 @@
  
 	<insert id="insertTeachingvideos" useGeneratedKeys="true" keyProperty="vid" parameterType="Teachingvideos">
     insert into teachingvideos
-    (vname,cid,vfile,vdescription,uploadtime)
+    (vname,cid,vfile,vdescription,uploadtime,opstatus)
     values
-    (#{vname},#{cid},#{vfile},#{vdescription},now());
+    (#{vname},#{cid},#{vfile},#{vdescription},now(),'0');
   </insert>
 	
 	<update id="updateTeachingvideos" parameterType="Teachingvideos" >
@@ -92,6 +99,9 @@
 		</if>
 		<if test="uploadtime != null and uploadtime != ''">
 		    uploadtime = #{uploadtime},
+		</if>
+		<if test="opstatus != null and opstatus != ''">
+			opstatus = #{opstatus},
 		</if>
 
     </set>

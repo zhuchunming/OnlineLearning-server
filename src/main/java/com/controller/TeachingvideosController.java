@@ -1,8 +1,9 @@
 package com.controller;
 
-import com.model.*;
+import com.model.Teachingvideos;
 import com.response.Response;
-import com.service.*;
+import com.service.TeachingvideosService;
+import com.util.BusinessException;
 import com.util.PageBean;
 import com.util.removeHTML;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/teachingvideos")
@@ -50,12 +49,12 @@ public class TeachingvideosController {
 	@CrossOrigin
 	public Response add(@RequestBody Teachingvideos teachingvideos, HttpServletRequest req) throws Exception {
 		try {
-			teachingvideosService.insertTeachingvideos(teachingvideos); // 添加
-
+			return Response.success(teachingvideosService.insertTeachingvideos(teachingvideos));
+		} catch (BusinessException e) {
+			return Response.error(500,e.getMessage());
 		} catch (Exception e) {
 			return Response.error();
 		}
-		return Response.success();
 	}
 
 	// 删除教学视频

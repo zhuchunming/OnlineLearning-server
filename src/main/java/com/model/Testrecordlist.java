@@ -5,7 +5,7 @@ import java.util.Date;
 /**
 * (testrecordlist)测试记录明细实体类
 */
-public class Testrecordlist {
+public class Testrecordlist implements java.io.Serializable{
 	private static final long serialVersionUID = 7649634863681390566L;
 	private Integer id;    		//测试明细id
 	private Integer mainid;     //测试id

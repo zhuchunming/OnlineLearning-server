@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CommonAuditMapper">
+
+	<select id="query" parameterType="java.util.Map" resultType="CommonAudit">
+		select id,a.applyno,a.applytype,a.applyname,a.opcode,a.createtime,
+		(case when a.opstatus = '0' then
+		'待审核'
+		when a.opstatus = '1' then
+		'审核驳回'
+		when a.opstatus = '2' then
+		'审核通过' else ''
+		end
+		) opstatus,
+		t.vname,t.vfile,t.vdescription
+		from commonaudit a left join teachingvideos t on a.applydataid = t.vid
+		<where>
+			<if test="applyno != null and applyno != ''">
+				and a.applyno = #{applyno}
+			</if>
+			<if test="applytype != null and applytype != ''">
+				and a.applytype = #{applytype}
+			</if>
+			<if test="applyuser != null and applyuser != ''">
+				and a.applyuser = #{applyuser}
+			</if>
+			<if test="opstatus != null and opstatus != ''">
+				and a.opstatus = #{opstatus}
+			</if>
+		</where>
+		order by a.createtime
+		<if test="page">
+			limit #{offset} ,#{pageSize}
+		</if>
+	</select>
+
+	<select id="getCount" parameterType="java.util.Map" resultType="int">
+		select count(1) from commonaudit a left join teachingvideos t on a.applydataid = t.vid
+		<where>
+			<if test="applyno != null and applyno != ''">
+				and a.applyno = #{applyno}
+			</if>
+			<if test="applytype != null and applytype != ''">
+				and a.applytype = #{applytype}
+			</if>
+			<if test="applyuser != null and applyuser != ''">
+				and a.applyuser = #{applyuser}
+			</if>
+			<if test="opstatus != null and opstatus != ''">
+				and a.opstatus = #{opstatus}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertAudit"  useGeneratedKeys="true" keyProperty="id" parameterType="CommonAudit">
+		insert into commonaudit (applydataid,applyno,applytype,applyname,opcode,opstatus)
+		values (#{applydataid}, #{applyno}, #{applytype},#{applyname}, #{opcode},'0')
+	</insert>
+
+	<update id="updateAudit" parameterType="CommonAudit" >
+		update commonaudit
+		<set>
+			<if test="opstatus != null and opstatus != ''">
+				opstatus = #{opstatus},
+			</if>
+			lastopdate = now()
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+
+</mapper>
+
+ 

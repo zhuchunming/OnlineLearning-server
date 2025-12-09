@@ -1,6 +1,9 @@
 package com.service.impl;
+
+import com.enums.AuditType;
 import com.mapper.TeachingvideosMapper;
 import com.model.Teachingvideos;
+import com.service.CommonAuditService;
 import com.service.TeachingvideosService;
 import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,9 @@ public class TeachingvideosServiceImpl implements TeachingvideosService {
         
 	@Autowired
 	private TeachingvideosMapper teachingvideosMapper;
+
+	@Autowired
+	private CommonAuditService auditService;
 
 	//查询多条记录
 	public List<Teachingvideos> queryTeachingvideosList(Teachingvideos teachingvideos,PageBean page) throws Exception {
@@ -50,8 +56,14 @@ public class TeachingvideosServiceImpl implements TeachingvideosService {
 	}
 		
 	//添加
-	public int insertTeachingvideos(Teachingvideos teachingvideos) throws Exception {
-		return teachingvideosMapper.insertTeachingvideos(teachingvideos);
+	public String insertTeachingvideos(Teachingvideos teachingvideos) throws Exception {
+
+		int result = teachingvideosMapper.insertTeachingvideos(teachingvideos);
+		String applyno = null;
+		if(result > 0){
+			applyno = auditService.insertAudit(teachingvideos.getVid(), AuditType.MP4_IMPORT.getCode(),AuditType.MP4_IMPORT.getName(),teachingvideos.getOpcode());
+		}
+		return applyno;
 	}
 
 	//根据ID删除

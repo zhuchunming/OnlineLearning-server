@@ -132,10 +132,9 @@ public class QuestionsController {
 											   @RequestParam("pageSize") Integer pageSize
 	) throws Exception {
 		int offset = (currentPage - 1) * pageSize; // 当前页开始记录
-		int counts = 0; // 总记录数
 		PageBean page = new PageBean(offset, pageSize); // 分页对象
 		// 查询记录总数
-		counts = questionsService.getSnoErrCount(sno);
+		int counts = questionsService.getSnoErrCount(sno);
 		// 获取当前页记录
 		List<Questions> questionsList = questionsService.querySnoErrQuestions(sno, page);
 		int page_count = counts % PageBean.PAGE_IETM == 0 ? counts / PageBean.PAGE_IETM
