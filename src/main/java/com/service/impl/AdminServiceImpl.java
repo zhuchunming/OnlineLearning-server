@@ -1,16 +1,16 @@
-package com.service;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+package com.service.impl;
+import com.mapper.AdminMapper;
+import com.model.Admin;
+import com.service.AdminService;
+import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mapper.AdminMapper;
-import com.model.Admin;
-import com.util.PageBean;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Service
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
         
 	@Autowired
 	private AdminMapper adminMapper;

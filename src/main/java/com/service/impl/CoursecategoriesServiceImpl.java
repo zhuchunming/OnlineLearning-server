@@ -1,16 +1,16 @@
-package com.service;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+package com.service.impl;
+import com.mapper.CoursecategoriesMapper;
+import com.model.Coursecategories;
+import com.service.CoursecategoriesService;
+import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mapper.CoursecategoriesMapper;
-import com.model.Coursecategories;
-import com.util.PageBean;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Service
-public class CoursecategoriesServiceImpl implements CoursecategoriesService{
+public class CoursecategoriesServiceImpl implements CoursecategoriesService {
         
 	@Autowired
 	private CoursecategoriesMapper coursecategoriesMapper;

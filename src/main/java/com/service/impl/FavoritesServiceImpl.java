@@ -1,8 +1,9 @@
-package com.service;
+package com.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.service.FavoritesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.mapper.FavoritesMapper;
 import com.model.Favorites;
 import com.util.PageBean;
 @Service
-public class FavoritesServiceImpl implements FavoritesService{
+public class FavoritesServiceImpl implements FavoritesService {
         
 	@Autowired
 	private FavoritesMapper favoritesMapper;

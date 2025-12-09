@@ -1,8 +1,9 @@
-package com.service;
+package com.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.service.CoursemessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.mapper.CoursemessageMapper;
 import com.model.Coursemessage;
 import com.util.PageBean;
 @Service
-public class CoursemessageServiceImpl implements CoursemessageService{
+public class CoursemessageServiceImpl implements CoursemessageService {
         
 	@Autowired
 	private CoursemessageMapper coursemessageMapper;

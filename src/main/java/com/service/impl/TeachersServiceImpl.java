@@ -1,8 +1,9 @@
-package com.service;
+package com.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.service.TeachersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.mapper.TeachersMapper;
 import com.model.Teachers;
 import com.util.PageBean;
 @Service
-public class TeachersServiceImpl implements TeachersService{
+public class TeachersServiceImpl implements TeachersService {
         
 	@Autowired
 	private TeachersMapper teachersMapper;

@@ -1,6 +1,7 @@
-package com.service;
+package com.service.impl;
 import com.mapper.QuestionsMapper;
 import com.model.Questions;
+import com.service.QuestionsService;
 import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Service
-public class QuestionsServiceImpl implements QuestionsService{
+public class QuestionsServiceImpl implements QuestionsService {
         
 	@Autowired
 	private QuestionsMapper questionsMapper;

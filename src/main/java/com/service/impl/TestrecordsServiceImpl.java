@@ -1,4 +1,4 @@
-package com.service;
+package com.service.impl;
 
 import com.mapper.QuestionsMapper;
 import com.mapper.TesterrorsetMapper;
@@ -8,6 +8,7 @@ import com.model.Questions;
 import com.model.Testerrorset;
 import com.model.Testrecordlist;
 import com.model.Testrecords;
+import com.service.TestrecordsService;
 import com.util.BusinessException;
 import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-public class TestrecordsServiceImpl implements TestrecordsService{
+public class TestrecordsServiceImpl implements TestrecordsService {
         
 	@Autowired
 	private TestrecordsMapper testrecordsMapper;

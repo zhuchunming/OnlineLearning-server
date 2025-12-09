@@ -1,16 +1,16 @@
-package com.service;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+package com.service.impl;
+import com.mapper.TeachingvideosMapper;
+import com.model.Teachingvideos;
+import com.service.TeachingvideosService;
+import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mapper.TeachingvideosMapper;
-import com.model.Teachingvideos;
-import com.util.PageBean;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Service
-public class TeachingvideosServiceImpl implements TeachingvideosService{
+public class TeachingvideosServiceImpl implements TeachingvideosService {
         
 	@Autowired
 	private TeachingvideosMapper teachingvideosMapper;
