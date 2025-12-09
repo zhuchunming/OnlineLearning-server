@@ -1,14 +1,13 @@
 package com.service;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.mapper.QuestionsMapper;
 import com.model.Questions;
 import com.util.PageBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Service
 public class QuestionsServiceImpl implements QuestionsService{
         
@@ -31,9 +30,24 @@ public class QuestionsServiceImpl implements QuestionsService{
 		int count = questionsMapper.getCount(map);
 		return count;
 	}
-	
+
+	//得到用户错误记录总数
+	@Override
+	public int getSnoErrCount(String sno) {
+		return questionsMapper.getSnoErrCount(sno);
+	}
+
+	@Override
+	public List<Questions> querySnoErrQuestions(String sno, PageBean page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sno", sno);
+		PageBean.setPageMap(map, page);
+		return questionsMapper.querySnoErrQuestions(map);
+	}
+
 	private Map<String, Object> getQueryMap(Questions questions,PageBean page){
 		Map<String, Object> map = new HashMap<String, Object>();
+		PageBean.setPageMap(map, page);
 		if(questions!=null){
 			map.put("qid", questions.getQid());
 			map.put("cid", questions.getCid());

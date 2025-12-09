@@ -1,8 +1,8 @@
 package com.service;
-import java.util.List;
-
 import com.model.Questions;
 import com.util.PageBean;
+
+import java.util.List;
 
 public interface QuestionsService{
 	
@@ -24,5 +24,10 @@ public interface QuestionsService{
 	//得到记录总数
 	int getCount(Questions questions);
 
+	//获取用户错误记录总数
+	int getSnoErrCount(String sno);
+
+	//获取用户错误记录
+	List<Questions> querySnoErrQuestions(String sno, PageBean page);
 }
 

@@ -1,8 +1,8 @@
 package com.service;
-import java.util.List;
-
 import com.model.Testrecords;
 import com.util.PageBean;
+
+import java.util.List;
 
 public interface TestrecordsService{
 	
@@ -10,10 +10,10 @@ public interface TestrecordsService{
 	public List<Testrecords> queryTestrecordsList(Testrecords testrecords,PageBean page) throws Exception;
  
 	//添加
-	public int insertTestrecords(Testrecords testrecords) throws Exception ;
+	public void insertTestrecords(Testrecords testrecords) throws Exception ;
 	
 	//根据ID删除
-	public int deleteTestrecords(int id) throws Exception ;
+	public void deleteTestrecords(int id) throws Exception ;
 	
 	//更新
 	public int updateTestrecords(Testrecords testrecords) throws Exception ;

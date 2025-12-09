@@ -1,18 +1,16 @@
 package com.controller;
 
-import com.model.*;
+import com.model.Questions;
 import com.response.Response;
-import com.service.*;
+import com.service.QuestionsService;
 import com.util.PageBean;
 import com.util.removeHTML;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/questions")
@@ -101,6 +99,12 @@ public class QuestionsController {
 
 	}
 
+	/**
+	 * 测试题列表
+	 * @param questions
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@PostMapping(value = "/listByCourse")
 	@CrossOrigin
@@ -117,6 +121,32 @@ public class QuestionsController {
 		} catch (Exception e) {
 			return Response.error();
 		}
+	}
+
+	/**
+	 * 错题列表
+	 * @param sno 账号
+	 * @param currentPage 当前页码
+	 * @param pageSize 每页条数
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/errorlist")
+	@CrossOrigin
+	public Response<List<Questions>> errorlist(@RequestParam("sno") String sno,
+											   @RequestParam("currentPage") Integer currentPage,
+											   @RequestParam("pageSize") Integer pageSize
+	) throws Exception {
+		int offset = (currentPage - 1) * pageSize; // 当前页开始记录
+		int counts = 0; // 总记录数
+		PageBean page = new PageBean(offset, pageSize); // 分页对象
+		// 查询记录总数
+		counts = questionsService.getSnoErrCount(sno);
+		// 获取当前页记录
+		List<Questions> questionsList = questionsService.querySnoErrQuestions(sno, page);
+		int page_count = counts % PageBean.PAGE_IETM == 0 ? counts / PageBean.PAGE_IETM
+				: counts / PageBean.PAGE_IETM + 1; // 总页数
+		return Response.success(questionsList, counts, page_count);
 	}
 
 }

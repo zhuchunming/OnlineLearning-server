@@ -1,17 +1,15 @@
 package com.controller;
 
-import com.model.*;
+import com.model.Testrecords;
 import com.response.Response;
-import com.service.*;
+import com.service.TestrecordsService;
+import com.util.BusinessException;
 import com.util.PageBean;
-import com.util.removeHTML;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/testrecords")
@@ -44,8 +42,9 @@ public class TestrecordsController{
 	public Response add(@RequestBody Testrecords testrecords, HttpServletRequest req) throws Exception {
 		try {
 			testrecordsService.insertTestrecords(testrecords); //添加
-   
-			} catch (Exception e) {
+		} catch (BusinessException e) {
+			return Response.error(500,e.getMessage());
+		} catch (Exception e) {
 			return Response.error();
 		}
 		return Response.success();

@@ -1,6 +1,4 @@
 package com.model;
-import java.util.List;
-
 /**
 * (testrecords)测试记录实体类
 */
@@ -15,6 +13,8 @@ public class Testrecords extends ComData{
 	private Integer correctcount;    //正确数量
 	private Integer errorcount;    //错误数量
 	private Object score;    //成绩
+	private String answers;//用户答案合集
+	private	String questionids;//试题id合集
 	private String testtime;    //测试时间
 
 	public Integer getId() {
@@ -79,6 +79,22 @@ public class Testrecords extends ComData{
 
 	public void setScore(Object score) {
 		this.score = score;
+	}
+
+	public String getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(String answers) {
+		this.answers = answers;
+	}
+
+	public String getQuestionids() {
+		return questionids;
+	}
+
+	public void setQuestionids(String questionids) {
+		this.questionids = questionids;
 	}
 
 	public String getTesttime() {

@@ -1,9 +1,10 @@
 package com.mapper;
 
+import com.model.Questions;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
-
-import com.model.Questions;
 
 public interface QuestionsMapper {
 
@@ -15,6 +16,9 @@ public interface QuestionsMapper {
 	
 	//得到记录总数
 	int getCount(Map<String,Object> inputParam);
+
+	//得到用户错误记录总数
+	int getSnoErrCount(String sno);
 	
 	//添加
 	public int insertQuestions(Questions questions);
@@ -27,6 +31,11 @@ public interface QuestionsMapper {
 	
 	//根据ID得到对应的记录
 	public Questions queryQuestionsById(int id);
-	
+
+	//根据in(ID)得到对应的记录
+	public List<Questions> queryQuestionsByIds(@Param("ids") List<Integer> ids);
+
+	//获取用户错误记录
+	List<Questions> querySnoErrQuestions(Map<String, Object> map);
 }
 

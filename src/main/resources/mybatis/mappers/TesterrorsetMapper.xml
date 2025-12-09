@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.TesterrorsetMapper">
+
+	<insert id="insertTesterrorset" parameterType="java.util.List">
+		insert into testerrorset
+		(sno,num,qid,createtime,lastopdate)
+		values
+		<foreach collection="list" item="record" separator=",">
+			(#{record.sno}, #{record.num}, #{record.qid},now(),now())
+		</foreach>
+	</insert>
+
+	<select id="queryErrorsetBySnoAndIds" resultType="java.lang.Integer">
+		select qid from testerrorset
+		where sno = #{sno} and  qid in
+		<foreach collection="qids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<update id="updateErrorsetNumBySnoAndIds">
+		update testerrorset
+		set num = num + 1,
+		lastopdate = now()
+		where sno = #{sno}
+		and qid in
+		<foreach collection="qids" item="qid"
+				 open="(" separator="," close=")">
+			#{qid}
+		</foreach>
+	</update>
+
+</mapper>
+
+ 
