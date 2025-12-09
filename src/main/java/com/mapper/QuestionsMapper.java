@@ -36,6 +36,9 @@ public interface QuestionsMapper {
 	public List<Questions> queryQuestionsByIds(@Param("ids") List<Integer> ids);
 
 	//获取用户错误记录
-	List<Questions> querySnoErrQuestions(Map<String, Object> map);
+	public List<Questions> querySnoErrQuestions(Map<String, Object> map);
+
+	//获取课程所有的试题记录
+	public List<Integer> queryQuestionQidsByCid(int cid);
 }
 

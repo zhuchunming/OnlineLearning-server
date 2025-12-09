@@ -1,7 +1,6 @@
 package com.mapper;
 
 import com.model.Testrecordlist;
-
 import java.util.List;
 
 public interface TestrecordlistMapper {
@@ -11,6 +10,8 @@ public interface TestrecordlistMapper {
 
 	//根据mainid删除
 	public int deleteTestrecordlist(int mainid);
-	
+
+	//获取用户做题历史记录
+	List<Integer> queryTestrecordlistBySno(String sno);
 }
 

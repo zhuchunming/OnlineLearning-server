@@ -1,5 +1,4 @@
 package com.model;
-import java.util.List;
 
 /**
 * (questions)试题实体类
@@ -13,6 +12,7 @@ public class Questions extends ComData{
 	private String content;    //试题内容
 	private String answer;    //试题答案
 	private String analysis;    //试题解析
+	private String sno;			//账号
 
 	public Integer getQid() {
 		return qid;
@@ -62,5 +62,12 @@ public class Questions extends ComData{
 		this.analysis = analysis;
 	}
 
+	public String getSno() {
+		return sno;
+	}
+
+	public void setSno(String sno) {
+		this.sno = sno;
+	}
 }
 

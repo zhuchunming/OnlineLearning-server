@@ -3,12 +3,16 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.TestrecordlistMapper">
 
+	<select id="queryTestrecordlistBySno" parameterType="String" resultType="int">
+		select distinct qid from testrecordlist where sno = #{value}
+	</select>
+
 	<insert id="insertTestrecordlist" parameterType="java.util.List">
 		insert into testrecordlist
-		(mainid,qid,useranswer,testtime)
+		(mainid,sno,qid,useranswer,testtime)
 		values
 		<foreach collection="list" item="record" separator=",">
-			(#{record.mainid}, #{record.qid}, #{record.useranswer},now())
+			(#{record.mainid}, #{record.sno}, #{record.qid}, #{record.useranswer},now())
 		</foreach>
 	</insert>
 

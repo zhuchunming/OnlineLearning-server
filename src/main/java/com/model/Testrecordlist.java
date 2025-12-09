@@ -5,17 +5,19 @@ import java.util.Date;
 /**
 * (testrecordlist)测试记录明细实体类
 */
-public class Testrecordlist extends ComData{
+public class Testrecordlist {
 	private static final long serialVersionUID = 7649634863681390566L;
 	private Integer id;    		//测试明细id
 	private Integer mainid;     //测试id
-	private Integer qid;			//试题id
+	private String sno;  		//账号
+	private Integer qid;		//试题id
 	private String useranswer;  //用户答案
-	private Date testtime;    //测试时间
+	private Date testtime;      //测试时间
 
 	public Testrecordlist(){}
-	public Testrecordlist(Integer mainid, Integer qid, String useranswer) {
+	public Testrecordlist(Integer mainid, String sno, Integer qid, String useranswer) {
 		this.mainid = mainid;
+		this.sno = sno;
 		this.qid = qid;
 		this.useranswer = useranswer;
 	}
@@ -34,6 +36,14 @@ public class Testrecordlist extends ComData{
 
 	public void setMainid(Integer mainid) {
 		this.mainid = mainid;
+	}
+
+	public String getSno() {
+		return sno;
+	}
+
+	public void setSno(String sno) {
+		this.sno = sno;
 	}
 
 	public Integer getQid() {

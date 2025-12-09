@@ -11,8 +11,11 @@ import com.model.Testrecords;
 import com.service.TestrecordsService;
 import com.util.BusinessException;
 import com.util.PageBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -21,7 +24,9 @@ import java.util.stream.IntStream;
 
 @Service
 public class TestrecordsServiceImpl implements TestrecordsService {
-        
+
+	private final static Logger log = LoggerFactory.getLogger(TestrecordsServiceImpl.class);
+
 	@Autowired
 	private TestrecordsMapper testrecordsMapper;
 
@@ -71,50 +76,58 @@ public class TestrecordsServiceImpl implements TestrecordsService {
 	}
 
 	//添加
+	@Transactional(rollbackFor = Exception.class)
 	public void insertTestrecords(Testrecords testrecords) throws Exception {
-		//新增记录主表
-		int result = testrecordsMapper.insertTestrecords(testrecords);
-		if(result > 0){
-			//问题与答案转换成集合
-			List<Testrecordlist> testrecordlist = tranTestrecordList(testrecords.getId(), testrecords.getAnswers(), testrecords.getQuestionids());
-			//新增记录明细
-			if(!CollectionUtils.isEmpty(testrecordlist)){
-				testrecordlistMapper.insertTestrecordlist(testrecordlist);
-			}
-			// 将字符串转为 List
-			List<Integer> ids = Arrays.stream(testrecords.getQuestionids().split(","))
-					.map(String::trim)  // 去除空格
-					.map(Integer::parseInt)  // 转为整数
-					.collect(Collectors.toList());
-			//获取用户试题列表
-			List<Questions> questions = questionsMapper.queryQuestionsByIds(ids);
-			//获取用户答错的题目ID列表
-			List<Integer> qidList = getWrongQuestionIds(testrecordlist,questions);
-			//用户是否错过的试题
-			List<Integer> existErrors = errorsetMapper.queryErrorsetBySnoAndIds(testrecords.getSno(),qidList);
-			//新增的错题集
-			List<Integer> resultqidList = new ArrayList<>();
-			if(!CollectionUtils.isEmpty(existErrors)){
-				//错过的试题 num+1
-				errorsetMapper.updateErrorsetNumBySnoAndIds(testrecords.getSno(),existErrors);
-				for (Integer qid : qidList) {
-					if (!existErrors.contains(qid)) {
-						resultqidList.add(qid);
-					}
+		try{
+			//新增记录主表
+			int result = testrecordsMapper.insertTestrecords(testrecords);
+			if(result > 0){
+				//问题与答案转换成集合
+				List<Testrecordlist> testrecordlist = tranTestrecordList(testrecords.getId(),testrecords.getSno(),testrecords.getAnswers(), testrecords.getQuestionids());
+				//新增记录明细
+				if(!CollectionUtils.isEmpty(testrecordlist)){
+					testrecordlistMapper.insertTestrecordlist(testrecordlist);
 				}
-			}else{
-				resultqidList.addAll(qidList);
+				// 将字符串转为 List
+				List<Integer> ids = Arrays.stream(testrecords.getQuestionids().split(","))
+						.map(String::trim)  // 去除空格
+						.map(Integer::parseInt)  // 转为整数
+						.collect(Collectors.toList());
+				//获取用户试题列表
+				List<Questions> questions = questionsMapper.queryQuestionsByIds(ids);
+				//获取用户答错的题目ID列表
+				List<Integer> qidList = getWrongQuestionIds(testrecordlist,questions);
+				//用户是否错过的试题
+				List<Integer> existErrors = errorsetMapper.queryErrorsetBySnoAndIds(testrecords.getSno(),qidList);
+				//新增的错题集
+				List<Integer> resultqidList = new ArrayList<>();
+				if(!CollectionUtils.isEmpty(existErrors)){
+					//错过的试题 num+1
+					errorsetMapper.updateErrorsetNumBySnoAndIds(testrecords.getSno(),existErrors);
+					for (Integer qid : qidList) {
+						if (!existErrors.contains(qid)) {
+							resultqidList.add(qid);
+						}
+					}
+				}else{
+					resultqidList.addAll(qidList);
+				}
+				//新增错题集
+				List<Testerrorset> errorsets = new ArrayList<>();
+				for(Integer id : resultqidList){
+					Testerrorset errorset = new Testerrorset();
+					errorset.setQid(id);
+					errorset.setNum(1);
+					errorset.setSno(testrecords.getSno());
+					errorsets.add(errorset);
+				}
+				errorsetMapper.insertTesterrorset(errorsets);
 			}
-			//新增错题集
-			List<Testerrorset> errorsets = new ArrayList<>();
-			for(Integer id : resultqidList){
-				Testerrorset errorset = new Testerrorset();
-				errorset.setQid(id);
-				errorset.setNum(1);
-				errorset.setSno(testrecords.getSno());
-				errorsets.add(errorset);
-			}
-			errorsetMapper.insertTesterrorset(errorsets);
+		}catch (Exception e) {
+			// 记录错误日志
+			log.info("在线测试保存测试记录失败: {}", e.getMessage());
+			// 抛出自定义异常，确保事务回滚
+			throw new BusinessException("保存测试记录失败: " + e.getMessage(), e);
 		}
 	}
 
@@ -169,8 +182,13 @@ public class TestrecordsServiceImpl implements TestrecordsService {
 
 	/**
 	 * 问题与答案转换成集合
+	 * @param mainid 主表id
+	 * @param sno 账号
+	 * @param answers 用户答案合集
+	 * @param questionIds 试题id合集
+	 * @return
 	 */
-	public static List<Testrecordlist> tranTestrecordList(int mainid,String answers, String questionIds) {
+	public static List<Testrecordlist> tranTestrecordList(int mainid, String sno, String answers, String questionIds) {
 		String[] answerArray = answers.split(",");
 		String[] idArray = questionIds.split(",");
 		// 验证长度
@@ -185,7 +203,7 @@ public class TestrecordsServiceImpl implements TestrecordsService {
 					try {
 						int qid = Integer.parseInt(idArray[i].trim());
 						String answer = answerArray[i].trim();
-						return new Testrecordlist(mainid, qid, answer);
+						return new Testrecordlist(mainid, sno, qid, answer);
 					} catch (NumberFormatException e) {
 						throw new BusinessException("问题ID格式错误: " + idArray[i], e);
 					}

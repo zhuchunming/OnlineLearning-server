@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * (testerrorset)错题集实体类
  */
-public class Testerrorset extends ComData{
+public class Testerrorset {
 	private static final long serialVersionUID = -5069714846901593754L;
 	private Integer id;    		//测试明细id
 	private String sno;     	//账号

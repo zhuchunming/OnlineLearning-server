@@ -1,11 +1,16 @@
 package com.service.impl;
+
 import com.mapper.QuestionsMapper;
+import com.mapper.SwitchControlMapper;
 import com.model.Questions;
+import com.model.SwitchControl;
 import com.service.QuestionsService;
 import com.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,13 +20,31 @@ public class QuestionsServiceImpl implements QuestionsService {
 	@Autowired
 	private QuestionsMapper questionsMapper;
 
+	@Autowired
+	private SwitchControlMapper switchControlMapper;
+
+	@Autowired
+	private QuestionGenerator questionGenerator;
+
 	//查询多条记录
 	public List<Questions> queryQuestionsList(Questions questions,PageBean page) throws Exception {
-		Map<String, Object> map =getQueryMap(questions, page);
-		
-		List<Questions> getQuestions = questionsMapper.query(map);
-		
-		return getQuestions;
+		//获取出题配置比例
+		SwitchControl sw = switchControlMapper.querySwitchControlByName("QUESTIONS_PROPORTION");
+		List<Questions> questionList;
+		//默认随机取10道试题
+		if(ObjectUtils.isEmpty(sw)){
+			Map<String, Object> map =getQueryMap(questions, page);
+			questionList = questionsMapper.query(map);
+			// 如果题目数量大于10道,随机抽取10道
+			if (questionList.size() > 10) {
+				Collections.shuffle(questionList);
+				questionList = questionList.subList(0, 10);
+			}
+		}else{//按配置规则取
+			List<Integer> qids = questionGenerator.generateQuestionPaper(questions.getSno(), questions.getCid(), sw);
+			questionList = questionsMapper.queryQuestionsByIds(qids);
+		}
+		return questionList;
 	}
 	
 	//得到记录总数

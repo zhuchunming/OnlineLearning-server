@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -112,11 +111,6 @@ public class QuestionsController {
 		try {
 			// 根据课程id查询试题列表,不分页
 			List<Questions> questionList = questionsService.queryQuestionsList(questions, null);
-			// 如果题目数量大于10道,随机抽取10道
-			if (questionList.size() > 10) {
-				Collections.shuffle(questionList);
-				questionList = questionList.subList(0, 10);
-			}
 			return Response.success(questionList);
 		} catch (Exception e) {
 			return Response.error();
